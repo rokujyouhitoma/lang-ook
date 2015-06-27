@@ -44,7 +44,7 @@ $ ./ook-jit2-c <input ook file>
 
 ```
 $ rpython --opt=jit ook-jit-debug.py
-./ook-jit-debug-c <input ook file>
+$ ./ook-jit-debug-c <input ook file>
 ```
 
 ## Run with output log file
