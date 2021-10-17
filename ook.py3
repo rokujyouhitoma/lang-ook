@@ -1,5 +1,20 @@
 import os
 import sys
+from dataclasses import dataclass
+
+
+@dataclass
+class TokenSet:
+      delimiter: str
+      advance: str
+      devance: str
+      increment: str
+      decrement: str
+      set: str
+      print: str
+      jump_forward: str
+      jump_back: str
+
 
 def mainloop(tokens, bracket_map):
     pc = 0
