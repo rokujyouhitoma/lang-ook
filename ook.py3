@@ -108,6 +108,17 @@ def parse(program):
 
 def run(fp):
     program_contents = ""
+    token_set = TokenSet(
+        delimiter=" ",
+        advance="Ook. Ook?",
+        devance="Ook? Ook.",
+        increment="Ook. Ook.",
+        decrement="Ook! Ook!",
+        set="Ook. Ook!",
+        print="Ook! Ook.",
+        jump_forward="Ook! Ook?",
+        jump_back="Ook? Ook!",
+    )
     while True:
         read = os.read(fp, 4096)
         if len(read) == 0:
