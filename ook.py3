@@ -73,9 +73,9 @@ class Tape(object):
     def devance(self):
         self.position -= 1
 
-def split(program):
+def split(token_delimiter, program):
     tokens = []
-    fragments = program.split(' ')
+    fragments = program.split(token_delimiter)
     length = len(fragments)
 
     for i in range(0, length, 2):
@@ -83,8 +83,8 @@ def split(program):
 
     return tokens
 
-def parse(program):
-    tokens = split(program)
+def parse(token_set, program):
+    tokens = split(token_set.delimiter, program)
 
     parsed = []
     bracket_map = {}
@@ -125,7 +125,7 @@ def run(fp):
             break
         program_contents += read.decode()
     os.close(fp)
-    tokens, bm = parse(program_contents)
+    tokens, bm = parse(token_set, program_contents)
     mainloop(tokens, bm)
 
 def entry_point(argv):
