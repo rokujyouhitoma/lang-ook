@@ -90,9 +90,20 @@ def parse(token_set, program):
     bracket_map = {}
     leftstack = []
 
+    instructions = set([
+        token_set.advance,
+        token_set.devance,
+        token_set.increment,
+        token_set.decrement,
+        token_set.set,
+        token_set.print,
+        token_set.jump_forward,
+        token_set.jump_back,
+    ])
+    
     pc = 0
     for token in tokens:
-        if token in ('Ook! Ook?', 'Ook? Ook!', 'Ook? Ook.', 'Ook. Ook?', 'Ook. Ook.', 'Ook! Ook!', 'Ook. Ook!', 'Ook! Ook.'):
+        if token in instructions:
             parsed.append(token)
 
             if token == 'Ook! Ook?':
