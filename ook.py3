@@ -106,9 +106,9 @@ def parse(token_set, program):
         if token in instructions:
             parsed.append(token)
 
-            if token == 'Ook! Ook?':
+            if token == token_set.jump_forward:
                 leftstack.append(pc)
-            elif token == 'Ook? Ook!':
+            elif token == token_set.jump_back:
                 left = leftstack.pop()
                 right = pc
                 bracket_map[left] = right
