@@ -16,7 +16,7 @@ class TokenSet:
       jump_back: str
 
 
-def mainloop(tokens, bracket_map):
+def mainloop(token_set, tokens, bracket_map):
     pc = 0
     tape = Tape()
 
@@ -137,7 +137,7 @@ def run(fp):
         program_contents += read.decode()
     os.close(fp)
     tokens, bm = parse(token_set, program_contents)
-    mainloop(tokens, bm)
+    mainloop(token_set, tokens, bm)
 
 def entry_point(argv):
     try:
