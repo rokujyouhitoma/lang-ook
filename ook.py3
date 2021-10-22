@@ -23,31 +23,31 @@ def mainloop(token_set, tokens, bracket_map):
     while pc < len(tokens):
         token = tokens[pc]
 
-        if token == "Ook. Ook?":
+        if token == token_set.advance:
             tape.advance()
 
-        elif token == "Ook? Ook.":
+        elif token == token_set.devance:
             tape.devance()
 
-        elif token == "Ook. Ook.":
+        elif token == token_set.increment:
             tape.inc()
 
-        elif token == "Ook! Ook!":
+        elif token == token_set.decrement:
             tape.dec()
 
-        elif token == "Ook! Ook.":
+        elif token == token_set.print:
             # print
             sys.stdout.write(chr(tape.get()))
 
-        elif token == "Ook. Ook!":
+        elif token == token_set.jump_forward:
             # read from stdin
             tape.set(ord(os.read(0, 1)[0]))
 
-        elif token == "Ook! Ook?" and tape.get() == 0:
+        elif token == token_set.jump_back and tape.get() == 0:
             # Skip forward to the matching ]
             pc = bracket_map[pc]
 
-        elif token == "Ook? Ook!" and tape.get() != 0:
+        elif token == token_set.jump_back and tape.get() != 0:
             # Skip back to the matching [
             pc = bracket_map[pc]
 
