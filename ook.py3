@@ -39,11 +39,11 @@ def mainloop(token_set, tokens, bracket_map):
             # print
             sys.stdout.write(chr(tape.get()))
 
-        elif token == token_set.jump_forward:
+        elif token == token_set.set:
             # read from stdin
             tape.set(ord(os.read(0, 1)[0]))
 
-        elif token == token_set.jump_back and tape.get() == 0:
+        elif token == token_set.jump_forward and tape.get() == 0:
             # Skip forward to the matching ]
             pc = bracket_map[pc]
 
