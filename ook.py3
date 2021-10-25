@@ -5,15 +5,15 @@ from dataclasses import dataclass
 
 @dataclass
 class TokenSet:
-      delimiter: str
-      advance: str
-      devance: str
-      increment: str
-      decrement: str
-      set: str
-      print: str
-      jump_forward: str
-      jump_back: str
+    delimiter: str
+    advance: str
+    devance: str
+    increment: str
+    decrement: str
+    set: str
+    print: str
+    jump_forward: str
+    jump_back: str
 
 
 def mainloop(token_set, tokens, bracket_map):
@@ -53,6 +53,7 @@ def mainloop(token_set, tokens, bracket_map):
 
         pc += 1
 
+
 class Tape(object):
     def __init__(self):
         self.thetape = [0]
@@ -60,18 +61,24 @@ class Tape(object):
 
     def get(self):
         return self.thetape[self.position]
+
     def set(self, val):
         self.thetape[self.position] = val
+
     def inc(self):
         self.thetape[self.position] += 1
+
     def dec(self):
         self.thetape[self.position] -= 1
+
     def advance(self):
         self.position += 1
         if len(self.thetape) <= self.position:
             self.thetape.append(0)
+
     def devance(self):
         self.position -= 1
+
 
 def split(token_delimiter, program):
     tokens = []
@@ -79,9 +86,10 @@ def split(token_delimiter, program):
     length = len(fragments)
 
     for i in range(0, length, 2):
-        tokens.append(fragments[i] + " " + fragments[i+1])
+        tokens.append(fragments[i] + " " + fragments[i + 1])
 
     return tokens
+
 
 def parse(token_set, program):
     tokens = split(token_set.delimiter, program)
@@ -90,17 +98,19 @@ def parse(token_set, program):
     bracket_map = {}
     leftstack = []
 
-    instructions = set([
-        token_set.advance,
-        token_set.devance,
-        token_set.increment,
-        token_set.decrement,
-        token_set.set,
-        token_set.print,
-        token_set.jump_forward,
-        token_set.jump_back,
-    ])
-    
+    instructions = set(
+        [
+            token_set.advance,
+            token_set.devance,
+            token_set.increment,
+            token_set.decrement,
+            token_set.set,
+            token_set.print,
+            token_set.jump_forward,
+            token_set.jump_back,
+        ]
+    )
+
     pc = 0
     for token in tokens:
         if token in instructions:
@@ -116,6 +126,7 @@ def parse(token_set, program):
             pc += 1
 
     return parsed, bracket_map
+
 
 def run(fp):
     program_contents = ""
@@ -139,6 +150,7 @@ def run(fp):
     tokens, bm = parse(token_set, program_contents)
     mainloop(token_set, tokens, bm)
 
+
 def entry_point(argv):
     try:
         filename = argv[1]
@@ -149,8 +161,10 @@ def entry_point(argv):
     run(os.open(filename, os.O_RDONLY))
     return 0
 
+
 def target(*args):
     return entry_point, None
+
 
 if __name__ == "__main__":
     entry_point(sys.argv)
