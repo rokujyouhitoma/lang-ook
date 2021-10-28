@@ -44,11 +44,9 @@ def mainloop(token_set, tokens, bracket_map):
             tape.set(ord(os.read(0, 1)[0]))
 
         elif token == token_set.jump_forward and tape.get() == 0:
-            # Skip forward to the matching ]
             pc = bracket_map[pc]
 
         elif token == token_set.jump_back and tape.get() != 0:
-            # Skip back to the matching [
             pc = bracket_map[pc]
 
         pc += 1
@@ -83,9 +81,7 @@ class Tape(object):
 def split(token_delimiter, program):
     tokens = []
     fragments = program.split(token_delimiter)
-    length = len(fragments)
-
-    for i in range(0, length, 2):
+    for i in range(0, len(fragments), 2):
         tokens.append(fragments[i] + " " + fragments[i + 1])
 
     return tokens
@@ -152,10 +148,13 @@ def run(fp):
 
 
 def entry_point(argv):
+    if len(argv) > 2:
+        print("Too many arguments.")
+        return 1
     try:
         filename = argv[1]
     except IndexError:
-        print("You must supply a filename")
+        print("You must supply a filename.")
         return 1
 
     run(os.open(filename, os.O_RDONLY))
