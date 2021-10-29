@@ -1,7 +1,20 @@
 import os
 import sys
 
-def mainloop(tokens, bracket_map):
+class TokenSet:
+    def __init__(self, delimiter, advance, devance, increment, decrement, set, print_, jump_forward, jump_back):
+        self.delimiter = delimiter
+        self.advance = advance
+        self.devance = devance
+        self.increment = increment
+        self.decrement = decrement
+        self.set = set
+        self.print_ = print_
+        self.jump_forward = jump_forward
+        self.jump_back = jump_back
+
+
+def mainloop(token_set, tokens, bracket_map):
     pc = 0
     tape = Tape()
 
@@ -68,7 +81,7 @@ def split(program):
 
     return tokens
 
-def parse(program):
+def parse(token_set, program):
     tokens = split(program)
 
     parsed = []
@@ -93,14 +106,25 @@ def parse(program):
 
 def run(fp):
     program_contents = ""
+    token_set = TokenSet(
+        delimiter=" ",
+        advance="Ook. Ook?",
+        devance="Ook? Ook.",
+        increment="Ook. Ook.",
+        decrement="Ook! Ook!",
+        set="Ook. Ook!",
+        print_="Ook! Ook.",
+        jump_forward="Ook! Ook?",
+        jump_back="Ook? Ook!",
+    )
     while True:
         read = os.read(fp, 4096)
         if len(read) == 0:
             break
         program_contents += read
     os.close(fp)
-    tokens, bm = parse(program_contents)
-    mainloop(tokens, bm)
+    tokens, bm = parse(token_set, program_contents)
+    mainloop(token_set, tokens, bm)
 
 def entry_point(argv):
     if len(argv) > 2:
