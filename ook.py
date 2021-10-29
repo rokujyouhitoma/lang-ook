@@ -103,10 +103,13 @@ def run(fp):
     mainloop(tokens, bm)
 
 def entry_point(argv):
+    if len(argv) > 2:
+        print("Too many arguments.")
+        return 1
     try:
         filename = argv[1]
     except IndexError:
-        print "You must supply a filename"
+        print("You must supply a filename.")
         return 1
 
     run(os.open(filename, os.O_RDONLY, 0777))
