@@ -44,9 +44,11 @@ def mainloop(token_set, tokens, bracket_map):
             tape.set(ord(os.read(0, 1)[0]))
 
         elif token == token_set.jump_forward and tape.get() == 0:
+            # Skip forward to the matching ]
             pc = bracket_map[pc]
 
         elif token == token_set.jump_back and tape.get() != 0:
+            # Skip back to the matching [
             pc = bracket_map[pc]
 
         pc += 1
