@@ -1,51 +1,38 @@
 import os
 import sys
 
-class TokenSet:
-    def __init__(self, delimiter, advance, devance, increment, decrement, set, print_, jump_forward, jump_back):
-        self.delimiter = delimiter
-        self.advance = advance
-        self.devance = devance
-        self.increment = increment
-        self.decrement = decrement
-        self.set = set
-        self.print_ = print_
-        self.jump_forward = jump_forward
-        self.jump_back = jump_back
-
-
-def mainloop(token_set, tokens, bracket_map):
+def mainloop(tokens, bracket_map):
     pc = 0
     tape = Tape()
 
     while pc < len(tokens):
         token = tokens[pc]
 
-        if token == token_set.advance:
+        if token == "Ook. Ook?":
             tape.advance()
 
-        elif token == token_set.devance:
+        elif token == "Ook? Ook.":
             tape.devance()
 
-        elif token == token_set.increment:
+        elif token == "Ook. Ook.":
             tape.inc()
 
-        elif token == token_set.decrement:
+        elif token == "Ook! Ook!":
             tape.dec()
 
-        elif token == token_set.print_:
+        elif token == "Ook! Ook.":
             # print
-            sys.stdout.write(chr(tape.get()))
+            os.write(1, chr(tape.get()))
 
-        elif token == token_set.set:
+        elif token == "Ook. Ook!":
             # read from stdin
             tape.set(ord(os.read(0, 1)[0]))
 
-        elif token == token_set.jump_forward and tape.get() == 0:
+        elif token == "Ook! Ook?" and tape.get() == 0:
             # Skip forward to the matching ]
             pc = bracket_map[pc]
 
-        elif token == token_set.jump_back and tape.get() != 0:
+        elif token == "Ook? Ook!" and tape.get() != 0:
             # Skip back to the matching [
             pc = bracket_map[pc]
 
@@ -81,7 +68,7 @@ def split(program):
 
     return tokens
 
-def parse(token_set, program):
+def parse(program):
     tokens = split(program)
 
     parsed = []
@@ -106,25 +93,14 @@ def parse(token_set, program):
 
 def run(fp):
     program_contents = ""
-    token_set = TokenSet(
-        delimiter=" ",
-        advance="Ook. Ook?",
-        devance="Ook? Ook.",
-        increment="Ook. Ook.",
-        decrement="Ook! Ook!",
-        set="Ook. Ook!",
-        print_="Ook! Ook.",
-        jump_forward="Ook! Ook?",
-        jump_back="Ook? Ook!",
-    )
     while True:
         read = os.read(fp, 4096)
         if len(read) == 0:
             break
         program_contents += read
     os.close(fp)
-    tokens, bm = parse(token_set, program_contents)
-    mainloop(token_set, tokens, bm)
+    tokens, bm = parse(program_contents)
+    mainloop(tokens, bm)
 
 def entry_point(argv):
     if len(argv) > 2:
