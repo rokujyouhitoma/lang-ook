@@ -118,6 +118,9 @@ def run(fp):
     mainloop(tokens, bm)
 
 def entry_point(argv):
+    if len(argv) > 2:
+        print("Too many arguments.")
+        return 1
     try:
         filename = argv[1]
     except IndexError:
