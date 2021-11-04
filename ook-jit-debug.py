@@ -128,7 +128,7 @@ def entry_point(argv):
     try:
         filename = argv[1]
     except IndexError:
-        print "You must supply a filename"
+        print("You must supply a filename")
         return 1
 
     run(os.open(filename, os.O_RDONLY, 0777))
