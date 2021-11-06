@@ -6,20 +6,29 @@ import sys
 try:
     from rpython.rlib.jit import JitDriver
 except ImportError:
-    class JitDriver(object):
-        def __init__(self,**kw): pass
-        def jit_merge_point(self,**kw): pass
-        def can_enter_jit(self,**kw): pass
 
-jitdriver = JitDriver(greens=['pc', 'bracket_map', 'tokens'], reds=['tape'])
+    class JitDriver(object):
+        def __init__(self, **kw):
+            pass
+
+        def jit_merge_point(self, **kw):
+            pass
+
+        def can_enter_jit(self, **kw):
+            pass
+
+
+jitdriver = JitDriver(greens=["pc", "bracket_map", "tokens"], reds=["tape"])
+
 
 def mainloop(tokens, bracket_map):
     pc = 0
     tape = Tape()
 
     while pc < len(tokens):
-        jitdriver.jit_merge_point(pc=pc, tape=tape,
-                                  bracket_map=bracket_map, tokens=tokens)
+        jitdriver.jit_merge_point(
+            pc=pc, tape=tape, bracket_map=bracket_map, tokens=tokens
+        )
 
         token = tokens[pc]
 
@@ -53,6 +62,7 @@ def mainloop(tokens, bracket_map):
 
         pc += 1
 
+
 class Tape(object):
     def __init__(self):
         self.thetape = [0]
@@ -60,28 +70,35 @@ class Tape(object):
 
     def get(self):
         return self.thetape[self.position]
+
     def set(self, val):
         self.thetape[self.position] = val
+
     def inc(self):
         self.thetape[self.position] += 1
+
     def dec(self):
         self.thetape[self.position] -= 1
+
     def advance(self):
         self.position += 1
         if len(self.thetape) <= self.position:
             self.thetape.append(0)
+
     def devance(self):
         self.position -= 1
 
+
 def split(program):
     tokens = []
-    fragments = program.split(' ')
+    fragments = program.split(" ")
     length = len(fragments)
 
     for i in range(0, length, 2):
-        tokens.append(fragments[i] + " " + fragments[i+1])
+        tokens.append(fragments[i] + " " + fragments[i + 1])
 
     return tokens
+
 
 def parse(program):
     tokens = split(program)
@@ -92,12 +109,21 @@ def parse(program):
 
     pc = 0
     for token in tokens:
-        if token in ('Ook! Ook?', 'Ook? Ook!', 'Ook? Ook.', 'Ook. Ook?', 'Ook. Ook.', 'Ook! Ook!', 'Ook. Ook!', 'Ook! Ook.'):
+        if token in (
+            "Ook! Ook?",
+            "Ook? Ook!",
+            "Ook? Ook.",
+            "Ook. Ook?",
+            "Ook. Ook.",
+            "Ook! Ook!",
+            "Ook. Ook!",
+            "Ook! Ook.",
+        ):
             parsed.append(token)
 
-            if token == 'Ook! Ook?':
+            if token == "Ook! Ook?":
                 leftstack.append(pc)
-            elif token == 'Ook? Ook!':
+            elif token == "Ook? Ook!":
                 left = leftstack.pop()
                 right = pc
                 bracket_map[left] = right
@@ -105,6 +131,7 @@ def parse(program):
             pc += 1
 
     return parsed, bracket_map
+
 
 def run(fp):
     program_contents = ""
@@ -116,6 +143,7 @@ def run(fp):
     os.close(fp)
     tokens, bm = parse(program_contents)
     mainloop(tokens, bm)
+
 
 def entry_point(argv):
     if len(argv) > 2:
@@ -130,12 +158,16 @@ def entry_point(argv):
     run(os.open(filename, os.O_RDONLY, 0777))
     return 0
 
+
 def target(*args):
     return entry_point, None
 
+
 def jitpolicy(driver):
     from rpython.jit.codewriter.policy import JitPolicy
+
     return JitPolicy()
+
 
 if __name__ == "__main__":
     entry_point(sys.argv)
